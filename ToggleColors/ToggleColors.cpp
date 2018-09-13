@@ -72,12 +72,10 @@ BOOL CToggleColors::InitInstance()
 	// of your final executable, you should remove from the following
 	// the specific initialization routines you do not need
 	// Change the registry key under which our settings are stored
-	// TODO: You should modify this string to be something appropriate
-	// such as the name of your company or organization
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
-		
+	
 	//Handshake with the Corsair keyboard
-	CorsairPerformProtocolHandshake();
+	CorsairProtocolDetails d;
+	d = CorsairPerformProtocolHandshake();
 
 	//Tell the OS to start sending us keyboard events
 	hookHandle = ::SetWindowsHookEx(WH_KEYBOARD_LL, this->KeyboardHook, nullptr, 0);
@@ -150,11 +148,20 @@ LRESULT CALLBACK CToggleColors::KeyboardHook(int code, WPARAM wParam, LPARAM lPa
 	}
 
 	//Make the color change
-	bool x = CorsairSetLedsColors(1, myLedColors);
+	bool setColorResult = CorsairSetLedsColors(1, myLedColors);
+
+	//Fix if ToggleColors was started before iCUE finished loading.
+	//If fail, redo the protocol handshake and then retry the set. 
+	if (!setColorResult)
+	{
+		CorsairProtocolDetails dtls = CorsairPerformProtocolHandshake();
+		if (dtls.serverProtocolVersion != 0) { CorsairSetLedsColors(1, myLedColors); }
+	}
 
 	//Pass the message on to anyone else that has a hook. 
 	return ::CallNextHookEx(nullptr, code, wParam, lParam);
 }
+
 
 
 

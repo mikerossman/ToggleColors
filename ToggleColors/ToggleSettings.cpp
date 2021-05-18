@@ -50,6 +50,10 @@ void ToggleSettings::SaveSettings()
 	a.Format(_T("NUM=%d\n"), (int) numEnabled);
 	settingFile.WriteString(a);
 
+	//NUM LOCK INVERT
+	a.Format(_T("NUM_INV=%d\n"), (int)numInverted);
+	settingFile.WriteString(a);
+
 	//Red when ON
 	settingFile.WriteString(_T("OnR="));
 	a.Format(_T("%d\n"), onR);
@@ -123,6 +127,11 @@ void ToggleSettings::ReadSettings()
 	settingFile.ReadString(a);
 	a = a.Mid(4);
 	numEnabled = (a == "1");
+
+	//NUM_INV=
+	settingFile.ReadString(a);
+	a = a.Mid(8);
+	numInverted = (a == "1");
 
 	//OnR=
 	settingFile.ReadString(a);

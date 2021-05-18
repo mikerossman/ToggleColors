@@ -16,6 +16,8 @@ public:
 	bool scrollEnabled;
 	//Are we watching NUM lock?
 	bool numEnabled;
+	//Are we inverting NUM lock?
+	bool numInverted;
 
 	//Red component of the color when the key is toggled on
 	byte onR;

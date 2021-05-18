@@ -36,6 +36,7 @@ public:
 	afx_msg void OnBnClickedColorOff();
 	afx_msg void OnBnClickedColorOn();
 	afx_msg void OnBnClickedEnableNumlock();
+	afx_msg void OnBnClickedInvertNumlock();
 	afx_msg void OnBnClickedEnableScrollock();
 	afx_msg void OnBnClickedEnableCapslock();
 

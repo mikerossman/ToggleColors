@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CToggleSettingsDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CToggleSettingsDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &CToggleSettingsDlg::OnBnClickedCancel)
 	ON_MESSAGE(WM_USER_SYSTRAY, OnSysTray)
+	ON_BN_CLICKED(IDC_INVERT_NUMLOCK, &CToggleSettingsDlg::OnBnClickedInvertNumlock)
 END_MESSAGE_MAP()
 
 
@@ -68,6 +69,9 @@ BOOL CToggleSettingsDlg::OnInitDialog()
 	//NUM 
 	chk = (CButton*)GetDlgItem(IDC_ENABLE_NUMLOCK);
 	chk->SetCheck(theApp.appSettings.numEnabled);
+	//NUM_INV
+	chk = (CButton*)GetDlgItem(IDC_INVERT_NUMLOCK);
+	chk->SetCheck(theApp.appSettings.numInverted);
 	//SCROLL
 	chk = (CButton*)GetDlgItem(IDC_ENABLE_SCROLLOCK);
 	chk->SetCheck(theApp.appSettings.scrollEnabled);
@@ -148,6 +152,13 @@ void CToggleSettingsDlg::OnBnClickedEnableNumlock()
 	//Capture whether we're watching the NUM lock key
 	CButton* chk = (CButton*)GetDlgItem(IDC_ENABLE_NUMLOCK);
 	theApp.appSettings.numEnabled = chk->GetCheck()==1;
+	theApp.appSettings.SaveSettings();
+}
+
+void CToggleSettingsDlg::OnBnClickedInvertNumlock() {
+	//Capture whether we're inverting the NUM lock key
+	CButton* chk = (CButton*)GetDlgItem(IDC_INVERT_NUMLOCK);
+	theApp.appSettings.numInverted = chk->GetCheck();
 	theApp.appSettings.SaveSettings();
 }
 

@@ -116,6 +116,7 @@ LRESULT CALLBACK CToggleColors::KeyboardHook(int code, WPARAM wParam, LPARAM lPa
 	//We know we need to do something, get the state of the toggle key pressed
 	CorsairLedColor myLedColors[1];
 	short keyState;
+	bool invert = false;    // Invert the behaviour (use the opposite color)
 	switch (keyPressed)
 	{
 	case VK_CAPITAL: keyState = GetKeyState(VK_CAPITAL);
@@ -123,6 +124,7 @@ LRESULT CALLBACK CToggleColors::KeyboardHook(int code, WPARAM wParam, LPARAM lPa
 		break;
 	case VK_NUMLOCK: keyState = GetKeyState(VK_NUMLOCK);
 		myLedColors[0].ledId = CorsairLedId::CLK_NumLock;
+		if (theApp.appSettings.numInverted) invert = true;
 		break;
 	case VK_SCROLL: keyState = GetKeyState(VK_SCROLL);
 		myLedColors[0].ledId = CorsairLedId::CLK_ScrollLock;
@@ -132,7 +134,7 @@ LRESULT CALLBACK CToggleColors::KeyboardHook(int code, WPARAM wParam, LPARAM lPa
 	//Figure out what colors we're going to set based on the key state. 
 	//Least significant bit set to 1 if the key is toggled on. Note this is executed before the OS or hardware changes the 
 	//state. So we're using reverse logic and acting on what the state will become, NOT what it presently is. 
-	if ((keyState & 0x0001) == 1)
+	if ((keyState & 0x0001) ^ invert)
 	{
 		//Key is transitioning to OFF
 		myLedColors[0].b = theApp.appSettings.offB;
